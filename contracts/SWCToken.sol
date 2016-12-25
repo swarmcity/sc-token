@@ -22,14 +22,14 @@ contract SWCToken is StandardToken {
     address public arcmultisig = 0x0;
 
     address public owner = 0x0;
+    StandardToken public arcToken;
 
-    function SWCToken(address _arcmultisig) {
+    function SWCToken(address _arcmultisig,address _arctokenaddress) {
         owner = msg.sender;
         arcmultisig = _arcmultisig;
+        arcToken = StandardToken(_arctokenaddress);
 
     }
-
-  StandardToken constant public arcToken = StandardToken(0xAc709FcB44a43c35F0DA4e3163b117A17F3770f5);
 
   	// convert ARC tokens to SWC tokens
     function convert(){
