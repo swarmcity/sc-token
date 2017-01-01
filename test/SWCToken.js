@@ -26,7 +26,21 @@ contract('SWCToken', function(accounts) {
     });
   });
 
-  describe('Convert Random to SWC', function() {
+  describe('Convert Random to SWC fails without having an allowance', function() {
+    it("should not be able to convert without allowance", function(done) {
+     
+        swctokencontract.convert().then(function() {    
+          assert.fail('this function should throw');
+          done();
+        }).catch(function(){
+          done();
+        });
+                
+      
+    });
+  });
+
+  describe('Convert Random to SWC with allowance', function() {
     it("should have correct balance on random token contract", function(done) {
       var balance = randomtokencontract.balanceOf.call(accounts[0]).then(function(balance) {
       assert.equal(balance.valueOf(), 100 * 1e18, "account not correct amount");
@@ -53,6 +67,9 @@ contract('SWCToken', function(accounts) {
     it("should convert", function(done) {
         swctokencontract.convert().then(function() {
             done();
+        }).catch(function(){
+          assert.fail('this function should not throw');
+          done();
         });
     });
 
