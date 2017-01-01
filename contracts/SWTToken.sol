@@ -11,7 +11,7 @@ import "./zeppelin/token/StandardToken.sol";
  
 contract SWTToken is StandardToken {
 
-    string public name = "Swarm Token";
+    string public name = "Swarm City Token";
     string public symbol = "SWT";
     uint public decimals = 18;
 
