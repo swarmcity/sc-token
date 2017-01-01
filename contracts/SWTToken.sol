@@ -34,7 +34,7 @@ contract SWTToken is StandardToken {
         uint arcbalance = arcToken.balanceOf(msg.sender);
         if (!arcToken.transferFrom.gas(100000)(msg.sender, arcdeposit, arcbalance))
             throw;
-		balances[msg.sender] = safeAdd(balances[msg.sender], safeMul(arcbalance, 3));        
+		balances[msg.sender] = safeAdd(balances[msg.sender], safeMul(arcbalance, 1));        
         totalSupply = safeAdd(totalSupply, arcbalance);
     }
 
