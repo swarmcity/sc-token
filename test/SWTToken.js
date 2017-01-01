@@ -1,8 +1,8 @@
-contract('SWCToken', function(accounts) {
+contract('SWTToken', function(accounts) {
 
-  var multisig_address = accounts[1];
+  var deposit_address = accounts[1];
 
-  var swctokencontract;
+  var swttokencontract;
   var randomtokencontract;
   var self = this;
 
@@ -16,20 +16,20 @@ contract('SWCToken', function(accounts) {
     });
   });
 
-  describe('Deploy SWC Token', function() {
+  describe('Deploy SWT Token', function() {
     it("should deploy Token contract", function(done) {
-      SWCToken.new(multisig_address,randomtokencontract.address).then(function(instance) {
-        swctokencontract = instance;
-        assert.isNotNull(swctokencontract);
+      SWTToken.new(deposit_address,randomtokencontract.address).then(function(instance) {
+        swttokencontract = instance;
+        assert.isNotNull(swttokencontract);
         done();
       });
     });
   });
 
-  describe('Convert Random to SWC fails without having an allowance', function() {
+  describe('Convert Random to SWT fails without having an allowance', function() {
     it("should not be able to convert without allowance", function(done) {
      
-        swctokencontract.convert().then(function() {    
+        swttokencontract.convert().then(function() {    
           assert.fail('this function should throw');
           done();
         }).catch(function(){
@@ -40,7 +40,7 @@ contract('SWCToken', function(accounts) {
     });
   });
 
-  describe('Convert Random to SWC with allowance', function() {
+  describe('Convert Random to SWT with allowance', function() {
     it("should have correct balance on random token contract", function(done) {
       var balance = randomtokencontract.balanceOf.call(accounts[0]).then(function(balance) {
       assert.equal(balance.valueOf(), 100 * 1e18, "account not correct amount");
@@ -48,8 +48,8 @@ contract('SWCToken', function(accounts) {
       });
     });
 
-    it("should have correct balance on SWC token contract", function(done) {
-      var balance = swctokencontract.balanceOf.call(accounts[0]).then(function(balance) {
+    it("should have correct balance on SWT token contract", function(done) {
+      var balance = swttokencontract.balanceOf.call(accounts[0]).then(function(balance) {
       assert.equal(balance.valueOf(), 0, "account not correct amount");
         done();
       });
@@ -58,14 +58,14 @@ contract('SWCToken', function(accounts) {
     it("should give allowance to convert", function(done) {
        var balance = randomtokencontract.balanceOf.call(accounts[0]).then(function(balance) {
       assert.equal(balance.valueOf(), 100 * 1e18, "account not correct amount");
-        randomtokencontract.approve(swctokencontract.address,balance).then(function() {
+        randomtokencontract.approve(swttokencontract.address,balance).then(function() {
             done();
         });
       });
     });
 
     it("should convert", function(done) {
-        swctokencontract.convert().then(function() {
+        swttokencontract.convert().then(function() {
             done();
         }).catch(function(){
           assert.fail('this function should not throw');
@@ -73,8 +73,8 @@ contract('SWCToken', function(accounts) {
         });
     });
 
-    it("should have new balance on SWC token contract", function(done) {
-      var balance = swctokencontract.balanceOf.call(accounts[0]).then(function(balance) {
+    it("should have new balance on SWT token contract", function(done) {
+      var balance = swttokencontract.balanceOf.call(accounts[0]).then(function(balance) {
       assert.equal(balance.valueOf(), 100 * 3 * 1e18, "account not correct amount");
         done();
       });
@@ -87,8 +87,8 @@ contract('SWCToken', function(accounts) {
       });
     });
 
-    it("should have Randomtoken balance on multisig contract", function(done) {
-      var balance = randomtokencontract.balanceOf.call(multisig_address).then(function(balance) {
+    it("should have Randomtoken balance on deposit wallet", function(done) {
+      var balance = randomtokencontract.balanceOf.call(deposit_address).then(function(balance) {
       assert.equal(balance.valueOf(), 100 * 1e18, "account not correct amount");
         done();
       });
