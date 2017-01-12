@@ -2,16 +2,16 @@ contract('MiniMeToken', function(accounts) {
 
   var deposit_address = accounts[1];
 
-  var swtToken; // this is the MiniMeToken version
-  var arcToken; // this is the old ARC token contract
-  var swtConverter; // this is the controller
+  var swtToken;               // this is the MiniMeToken version
+  var miniMeTokenFactory;
+  var arcToken;               // this is the old ARC token contract
+  var swtConverter;           // this is the controller that converts ARC->SWT
   var self = this;
 
   describe('Deploy ARC Token', function() {
     it("should deploy ARC token contract", function(done) {
 
       ARCToken.new(accounts[1], 1, 2).then(function(_arcToken) {
-        //            assert.ifError(err);
         assert.ok(_arcToken.address);
         arcToken = _arcToken;
         done();
@@ -21,15 +21,31 @@ contract('MiniMeToken', function(accounts) {
     });
   });
 
+
+  describe('Deploy MiniMeToken TokenFactory', function() {
+    it("should deploy MiniMeToken contract", function(done) {
+
+      MiniMeTokenFactory.new().then(function(_miniMeTokenFactory) {
+        assert.ok(_miniMeTokenFactory.address);
+        miniMeTokenFactory = _miniMeTokenFactory;
+        done();
+      });
+    });
+
+  });
+
   describe('Deploy MiniMeToken Token', function() {
     it("should deploy MiniMeToken contract", function(done) {
 
       MiniMeToken.new(
+        miniMeTokenFactory.address,
+        0,
+        0,
         "Swarm Token",
         18,
         "SWT",
+        true
       ).then(function(_miniMeToken) {
-        //            assert.ifError(err);
         assert.ok(_miniMeToken.address);
         swtToken = _miniMeToken;
         done();
