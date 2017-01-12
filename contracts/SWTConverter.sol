@@ -61,6 +61,10 @@ contract SWTConverter is TokenController, Owned {
 /////////////////
 
 
+ function proxyPayment(address _owner) payable returns(bool) {
+        throw;
+    }
+
 /// @notice Notifies the controller about a transfer, for this SWTConverter all
 ///  transfers are allowed by default and no extra notifications are needed
 /// @param _from The origin of the transfer
@@ -96,8 +100,9 @@ contract SWTConverter is TokenController, Owned {
 
         // transfer ARC to the vault address. caller needs to have an allowance from
         // this controller contract for _amount before calling this or the transferFrom will fail.
-        if (!arcToken.transferFrom.gas(100000)(msg.sender, vaultAddress, _amount))
+        if (!arcToken.transferFrom.gas(100000)(msg.sender, vaultAddress, _amount)) {
             throw;
+        }
 
         // mint new SWT tokens
         if (!tokenContract.generateTokens(msg.sender, _amount)) {
