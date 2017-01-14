@@ -1,4 +1,4 @@
-contract('MiniMeToken', function(accounts) {
+contract('SWTConverter', function(accounts) {
 
   var deposit_address = accounts[1];
 
@@ -13,7 +13,6 @@ contract('MiniMeToken', function(accounts) {
   describe('Deploy ARC Token', function() {
 
     it("should deploy ARC token contract from account " + accounts[0], function(done) {
-
       ARCToken.new(accounts[1], 1, 2).then(function(_arcToken) {
         assert.ok(_arcToken.address);
         arcToken = _arcToken;
@@ -204,7 +203,7 @@ contract('MiniMeToken', function(accounts) {
   });
 
 
-  describe('Minting and burning tokens should not be possible by someone else than the costoller', function() {
+  describe('Minting and burning tokens should not be possible by someone else than the controller', function() {
 
     it("should be impossible to call generateTokens", function(done) {
       swtToken.generateTokens(accounts[0], 1, {
@@ -302,6 +301,7 @@ contract('MiniMeToken', function(accounts) {
   });
 
   describe('Transfer coins in SWTtoken', function() {
+
     it("should be transfer tokens", function(done) {
       swtToken.transfer(accounts[1], 1, {
         gas: 400000
@@ -321,6 +321,7 @@ contract('MiniMeToken', function(accounts) {
   });
 
   describe('approval + transfers', function() {
+
     it("should give an approval transfer tokens", function(done) {
       swtToken.approve(accounts[1], 1, {
         gas: 400000
@@ -331,8 +332,9 @@ contract('MiniMeToken', function(accounts) {
         done();
       });
     });
-     it("should use the approved coins", function(done) {
-      swtToken.transferFrom(accounts[0],accounts[2], 1, {
+
+    it("should use the approved coins", function(done) {
+      swtToken.transferFrom(accounts[0], accounts[2], 1, {
         gas: 400000,
         from: accounts[1]
       }).then(function() {
@@ -342,14 +344,16 @@ contract('MiniMeToken', function(accounts) {
         done();
       });
     });
+
     it("receiving account should have a token ", function(done) {
       var balance = swtToken.balanceOf.call(accounts[2]).then(function(balance) {
         assert.equal(balance.valueOf(), 1, "account not correct amount");
         done();
       });
     });
-     it("should not be able to spend more than the approved coins", function(done) {
-      swtToken.transferFrom(accounts[0],accounts[2], 1, {
+
+    it("should not be able to spend more than the approved coins", function(done) {
+      swtToken.transferFrom(accounts[0], accounts[2], 1, {
         gas: 400000,
         from: accounts[1]
       }).then(function() {
