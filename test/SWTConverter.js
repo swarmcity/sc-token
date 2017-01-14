@@ -320,4 +320,45 @@ contract('MiniMeToken', function(accounts) {
     });
   });
 
+  describe('approval + transfers', function() {
+    it("should give an approval transfer tokens", function(done) {
+      swtToken.approve(accounts[1], 1, {
+        gas: 400000
+      }).then(function() {
+        done();
+      }).catch(function(e) {
+        assert.fail(null, null, 'This function should not throw', e);
+        done();
+      });
+    });
+     it("should use the approved coins", function(done) {
+      swtToken.transferFrom(accounts[0],accounts[2], 1, {
+        gas: 400000,
+        from: accounts[1]
+      }).then(function() {
+        done();
+      }).catch(function(e) {
+        assert.fail(null, null, 'This function should not throw', e);
+        done();
+      });
+    });
+    it("receiving account should have a token ", function(done) {
+      var balance = swtToken.balanceOf.call(accounts[2]).then(function(balance) {
+        assert.equal(balance.valueOf(), 1, "account not correct amount");
+        done();
+      });
+    });
+     it("should not be able to spend more than the approved coins", function(done) {
+      swtToken.transferFrom(accounts[0],accounts[2], 1, {
+        gas: 400000,
+        from: accounts[1]
+      }).then(function() {
+        assert.fail(null, null, 'This function should throw', e);
+        done();
+      }).catch(function(e) {
+        done();
+      });
+    });
+  });
+
 });
