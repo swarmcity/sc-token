@@ -74,15 +74,6 @@ contract('SWTConverter', function(accounts) {
         done();
       });
     });
-
-    it("should not be able to change the controller again", function(done) {
-      swtToken.changeController(0).then(function() {
-        assert.fail(null, null, 'this function should throw', e);
-        done();
-      }).catch(function(e) {
-        done();
-      });
-    });
   });
 
   describe('Convert ARC to SWT fails without having an allowance', function() {
@@ -202,32 +193,6 @@ contract('SWTConverter', function(accounts) {
     });
   });
 
-
-  describe('Minting and burning tokens should not be possible by someone else than the controller', function() {
-
-    it("should be impossible to call generateTokens", function(done) {
-      swtToken.generateTokens(accounts[0], 1, {
-        gas: 400000
-      }).then(function() {
-        assert.fail(null, null, 'This function should throw', e);
-        done();
-      }).catch(function(e) {
-        done();
-      });
-    });
-
-    it("should be impossible to call destroyTokens", function(done) {
-      swtToken.destroyTokens(accounts[0], 1, {
-        gas: 400000
-      }).then(function() {
-        assert.fail(null, null, 'This function should throw', e);
-        done();
-      }).catch(function(e) {
-        done();
-      });
-    });
-  });
-
   describe('Cloning of contract at current block', function() {
 
     it("should be able to clone this contract at block " + self.web3.eth.blockNumber, function(done) {
@@ -300,69 +265,5 @@ contract('SWTConverter', function(accounts) {
     });
   });
 
-  describe('Transfer coins in SWTtoken', function() {
-
-    it("should be transfer tokens", function(done) {
-      swtToken.transfer(accounts[1], 1, {
-        gas: 400000
-      }).then(function() {
-        done();
-      }).catch(function(e) {
-        assert.fail(null, null, 'This function should not throw', e);
-        done();
-      });
-    });
-    it("receiving account should have a token ", function(done) {
-      var balance = swtToken.balanceOf.call(accounts[1]).then(function(balance) {
-        assert.equal(balance.valueOf(), 1, "account not correct amount");
-        done();
-      });
-    });
-  });
-
-  describe('approval + transfers', function() {
-
-    it("should give an approval transfer tokens", function(done) {
-      swtToken.approve(accounts[1], 1, {
-        gas: 400000
-      }).then(function() {
-        done();
-      }).catch(function(e) {
-        assert.fail(null, null, 'This function should not throw', e);
-        done();
-      });
-    });
-
-    it("should use the approved coins", function(done) {
-      swtToken.transferFrom(accounts[0], accounts[2], 1, {
-        gas: 400000,
-        from: accounts[1]
-      }).then(function() {
-        done();
-      }).catch(function(e) {
-        assert.fail(null, null, 'This function should not throw', e);
-        done();
-      });
-    });
-
-    it("receiving account should have a token ", function(done) {
-      var balance = swtToken.balanceOf.call(accounts[2]).then(function(balance) {
-        assert.equal(balance.valueOf(), 1, "account not correct amount");
-        done();
-      });
-    });
-
-    it("should not be able to spend more than the approved coins", function(done) {
-      swtToken.transferFrom(accounts[0], accounts[2], 1, {
-        gas: 400000,
-        from: accounts[1]
-      }).then(function() {
-        assert.fail(null, null, 'This function should throw', e);
-        done();
-      }).catch(function(e) {
-        done();
-      });
-    });
-  });
 
 });
