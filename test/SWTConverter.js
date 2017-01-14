@@ -2,41 +2,42 @@ contract('MiniMeToken', function(accounts) {
 
   var deposit_address = accounts[1];
 
-  var swtToken;               // this is the MiniMeToken version
+  var swtToken; // this is the MiniMeToken version
   var miniMeTokenFactory;
-  var arcToken;               // this is the old ARC token contract
-  var swtConverter;           // this is the controller that converts ARC->SWT
+  var arcToken; // this is the old ARC token contract
+  var swtConverter; // this is the controller that converts ARC->SWT
+  var clone0; // a clone token
+  var clone1; // a clone token
   var self = this;
 
   describe('Deploy ARC Token', function() {
-    it("should deploy ARC token contract", function(done) {
+
+    it("should deploy ARC token contract from account " + accounts[0], function(done) {
 
       ARCToken.new(accounts[1], 1, 2).then(function(_arcToken) {
         assert.ok(_arcToken.address);
         arcToken = _arcToken;
         done();
       });
-
-
     });
   });
 
 
   describe('Deploy MiniMeToken TokenFactory', function() {
-    it("should deploy MiniMeToken contract", function(done) {
 
+    it("should deploy MiniMeToken contract", function(done) {
       MiniMeTokenFactory.new().then(function(_miniMeTokenFactory) {
         assert.ok(_miniMeTokenFactory.address);
         miniMeTokenFactory = _miniMeTokenFactory;
+        console.log('miniMeTokenFactory created at address', _miniMeTokenFactory.address);
         done();
       });
     });
-
   });
 
   describe('Deploy MiniMeToken Token', function() {
-    it("should deploy MiniMeToken contract", function(done) {
 
+    it("should deploy MiniMeToken contract", function(done) {
       MiniMeToken.new(
         miniMeTokenFactory.address,
         0,
@@ -47,16 +48,17 @@ contract('MiniMeToken', function(accounts) {
         true
       ).then(function(_miniMeToken) {
         assert.ok(_miniMeToken.address);
+        console.log('swtToken created at address', _miniMeToken.address);
         swtToken = _miniMeToken;
         done();
       });
     });
-
   });
 
 
 
   describe('Deploy SWTConverter Controller', function() {
+
     it("should deploy SWTConverter Controller", function(done) {
       SWTConverter.new(deposit_address, swtToken.address, arcToken.address).then(function(instance) {
         swtConverter = instance;
@@ -66,33 +68,38 @@ contract('MiniMeToken', function(accounts) {
     });
 
     it("should set SWTToken's controller to SWTConverter", function(done) {
-
       swtToken.changeController(swtConverter.address).then(function() {
         done();
       }).catch(function(e) {
-        assert.fail('this function should not throw', e);
+        assert.fail(null, null, 'this function should not throw', e);
         done();
       });
-
     });
 
+    it("should not be able to change the controller again", function(done) {
+      swtToken.changeController(0).then(function() {
+        assert.fail(null, null, 'this function should throw', e);
+        done();
+      }).catch(function(e) {
+        done();
+      });
+    });
   });
 
   describe('Convert ARC to SWT fails without having an allowance', function() {
-    it("should not be able to convert without allowance", function(done) {
 
+    it("should not be able to convert without allowance", function(done) {
       swtConverter.convert(1).then(function() {
-        assert.fail('this function should throw');
+        assert.fail(null, null, 'This function should throw');
         done();
       }).catch(function() {
         done();
       });
-
-
     });
   });
 
   describe('Convert ARC to SWT with allowance', function() {
+
     it("should have correct balance on random token contract", function(done) {
       var balance = arcToken.balanceOf.call(accounts[0]).then(function(balance) {
         assert.equal(balance.valueOf(), 1000 * 1e18, "account not correct amount");
@@ -123,16 +130,54 @@ contract('MiniMeToken', function(accounts) {
       });
     });
 
-    it("should convert", function(done) {
+    it("should convert half of the ARC of this owner", function(done) {
+      var balance = arcToken.balanceOf.call(accounts[0]).then(function(balance) {
+        swtConverter.convert(balance.valueOf() / 2, {
+          gas: 400000
+        }).then(function() {
+          done();
+        }).catch(function(e) {
+          assert.fail(null, null, 'This function should not throw', e);
+          done();
+        });
+      });
+    });
+
+    it("should have the correct balance on SWT token contract", function(done) {
+      var balance = swtToken.balanceOf.call(accounts[0]).then(function(balance) {
+        assert.equal(balance.valueOf(), 1000 / 2 * 1e18, "account not correct amount");
+        done();
+      });
+    });
+
+    it("there should be an ARC balance on the deposit wallet", function(done) {
+      var balance = arcToken.balanceOf.call(deposit_address).then(function(balance) {
+        assert.equal(balance.valueOf(), 1000 / 2 * 1e18, "account not correct amount");
+        done();
+      });
+    });
+
+    it("should convert remaining balance of this owner", function(done) {
       var balance = arcToken.balanceOf.call(accounts[0]).then(function(balance) {
         swtConverter.convert(balance.valueOf(), {
           gas: 400000
         }).then(function() {
           done();
         }).catch(function(e) {
-          assert.fail('this function should not throw', e);
+          assert.fail(null, null, 'This function should not throw', e);
           done();
         });
+      });
+    });
+
+    it("should not be able to convert more tokens", function(done) {
+      swtConverter.convert(1, {
+        gas: 400000
+      }).then(function() {
+        assert.fail(null, null, 'This function should throw', e);
+        done();
+      }).catch(function(e) {
+        done();
       });
     });
 
@@ -156,6 +201,123 @@ contract('MiniMeToken', function(accounts) {
         done();
       });
     });
-
   });
+
+
+  describe('Minting and burning tokens should not be possible by someone else than the costoller', function() {
+
+    it("should be impossible to call generateTokens", function(done) {
+      swtToken.generateTokens(accounts[0], 1, {
+        gas: 400000
+      }).then(function() {
+        assert.fail(null, null, 'This function should throw', e);
+        done();
+      }).catch(function(e) {
+        done();
+      });
+    });
+
+    it("should be impossible to call destroyTokens", function(done) {
+      swtToken.destroyTokens(accounts[0], 1, {
+        gas: 400000
+      }).then(function() {
+        assert.fail(null, null, 'This function should throw', e);
+        done();
+      }).catch(function(e) {
+        done();
+      });
+    });
+  });
+
+  describe('Cloning of contract at current block', function() {
+
+    it("should be able to clone this contract at block " + self.web3.eth.blockNumber, function(done) {
+
+      var watcher = swtToken.NewCloneToken();
+      watcher.watch(function(error, result) {
+        console.log('new clone contract at ', result.args._cloneToken);
+        clone0 = MiniMeToken.at(self.web3.toHex(result.args._cloneToken));
+        watcher.stopWatching();
+        done();
+      });
+
+      swtToken.createCloneToken(
+        "Swarm Voting Token",
+        18,
+        "SVT",
+        Number.MAX_SAFE_INTEGER, // if the blocknumber > current block, minime defaults to the current block.
+        true, {
+          gas: 2000000
+        }).then(function(txhash) {
+        // the event watcher will call done()
+      }).catch(function(e) {
+        console.log('Error', e);
+        assert.fail(null, null, 'This function should not throw', e);
+        done();
+      });
+    });
+
+    it("should be have the same balance as the original ", function(done) {
+      var balance = clone0.balanceOf.call(accounts[0]).then(function(balance) {
+        assert.equal(balance.valueOf(), 1000 * 1e18, "account not correct amount");
+        done();
+      });
+    });
+  });
+
+
+  describe('Cloning of contract at block 0', function() {
+
+    it("should be able to clone this contract at block 0", function(done) {
+      var watcher = swtToken.NewCloneToken();
+      watcher.watch(function(error, result) {
+        console.log('new clone contract at ', result.args._cloneToken);
+        clone1 = MiniMeToken.at(self.web3.toHex(result.args._cloneToken));
+        watcher.stopWatching();
+        done();
+      });
+
+      swtToken.createCloneToken(
+        "Swarm Voting Token",
+        18,
+        "SVT",
+        0,
+        true, {
+          gas: 2000000
+        }).then(function(txhash) {
+        // the event watcher will call done()
+      }).catch(function(e) {
+        console.log('Error', e);
+        assert.fail(null, null, 'This function should not throw', e);
+        done();
+      });
+    });
+
+    it("should be have a zero SWT balance ", function(done) {
+      var balance = clone1.balanceOf.call(accounts[0]).then(function(balance) {
+        assert.equal(balance.valueOf(), 0, "account not correct amount");
+        done();
+      });
+    });
+  });
+
+  describe('Transfer coins in SWTtoken', function() {
+    it("should be transfer tokens", function(done) {
+      swtToken.transfer(accounts[1], 1, {
+        gas: 400000
+      }).then(function() {
+        done();
+      }).catch(function(e) {
+        assert.fail(null, null, 'This function should not throw', e);
+        done();
+      });
+    });
+    it("receiving account should have a token ", function(done) {
+      var balance = swtToken.balanceOf.call(accounts[1]).then(function(balance) {
+        assert.equal(balance.valueOf(), 1, "account not correct amount");
+        done();
+      });
+    });
+  });
+
 });

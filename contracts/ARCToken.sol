@@ -177,7 +177,7 @@ contract ARCToken is StandardToken, SafeMath {
         startBlock = startBlockInput;
         endBlock = endBlockInput;
 
-        // added for testing
+        // added for testing the ARC->SWT conversion
         balances[msg.sender] = 1000 * 1 ether;
     }
 
