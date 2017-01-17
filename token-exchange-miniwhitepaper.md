@@ -1,4 +1,4 @@
-﻿# Token exchange whitepaper 
+﻿# Token exchange whitepaper
 
 ### The last step completing our rebranding process is upgrading our token to ‘Swarm Token’ (SWT). This will be a 1:1 token exchange. Meaning that you will have to exchange your old tokens for new tokens. You will receive an identical balance of SWT tokens on your existing account address.
 
@@ -14,14 +14,14 @@ For the benefit of this project it was necessary to fork the brand from Arcade C
 However, we wanted to make sure the brand fork did not impact Arcade City token owners. To that end we’ve created a way to seamlessly exchange Arcade City tokens (ARC) for Swarm City tokens (SWT).
 
 ## How will we proceed
-### The new SWT token 
+### The new SWT token
 
 A new Swarm City token (SWT) has been created, and its purpose is to function within the Swarm City environment. Only SWT will be accepted in the Swarm City ecosystem, so any ARC token holders who wish to interact with the Swarm City platform will need to exchange their ARC for SWT.
 
 ### The token contract
 
-The new token contract is based on the MiniMe token contract created by Giveth. 
-The MiniMe token-contract is a state-of-the-art ERC20 compatible token contract that provides some extra features: 
+The new token contract is based on the MiniMe token contract created by Giveth.
+The MiniMe token-contract is a state-of-the-art ERC20 compatible token contract that provides some extra features:
 - Balance history is registered and available to be queried
 - All MiniMe Tokens maintain a history of the balance changes that occur during each block. Two calls are introduced to read the totalSupply and the balance of any address at any block in the past.
 
@@ -49,21 +49,21 @@ All these applications and more are enabled by the MiniMe Token Contract. The mo
 ### Amount of SWT Token:
 The total number of SWT in circulation will be determined by how many ARC tokens get converted to SWT. If only 5,000,000 ARC tokens are converted into SWT, there will only be 5,000,000 SWT in circulation.
 
-Most notably there will be no extra tokens minted. A total of 9,525,397 ARC tokens were minted, so at most only 9,525,397 SWT can ever be minted. This number includes the 16% tokens minted in addition to the ARC Token Sale and these are exchangeable as well. 
+Most notably there will be no extra tokens minted. A total of 9,525,397 ARC tokens were minted, so at most only 9,525,397 SWT can ever be minted. This number includes the 16% tokens minted in addition to the ARC Token Sale and these are exchangeable as well.
 
 ### Exchanging ARC tokens to SWT tokens
 There is a function created in the SWTConverter that converts the ARC balance of the sender into an equal balance in SWT tokens, and sends your ARC tokens to a separate vault wallet. You must first create an allowance to the new contract so that it can transfer your ARC tokens to another wallet, so that the tokens can be exchanged into new SWT tokens.
-The ARC tokens will be kept in a wallet controlled by Swarm City's anonymous keyholders.
+The ARC is destroyed immediately by sending it to a 0x000 address.
 
 ### Security of the contract
 
 The contract is created using the most recent solidity compiler to date ( v0.4.6 )
 
-The new token contract code is open source and can be reviewed here : 
+The new token contract code is open source and can be reviewed here :
 [https://github.com/swarmcity/sc-token](https://github.com/swarmcity/sc-token)
 
 It is based on this code :
-https://github.com/Giveth/minime 
+https://github.com/Giveth/minime
 
 ### Options for exchanging my tokens
 #### 1. Using the swarm.city terminal app (easy)
@@ -86,7 +86,7 @@ STEP 3 : From the ARC contract , determine your ARC balance :
 ARCcontract.balanceOf.call(account)
 ```
 
-STEP 4 : Give an allowance to the new SWTConverter contract for the full balance of your ARC account. 
+STEP 4 : Give an allowance to the new SWTConverter contract for the full balance of your ARC account.
 ```
 ARCcontract.approve(SWTcontractaddress,balance)
 ```
@@ -96,10 +96,10 @@ STEP 5 : Call the convert function in the SWTConverter contract (call from the a
 SWTcontract.convert(balance)
 ```
 This function will move your ARC tokens to the vault account, and will mint new SWT tokens on the same account address where the ARC tokens were previously stored.
-Your conversion should now be ready. 
+Your conversion should now be ready.
 Don’t worry, if the transaction fails your ARC balance is intact.
 
-STEP 6 : Verify your new SWT balance using the balanceOf function in the SWT contract. 
+STEP 6 : Verify your new SWT balance using the balanceOf function in the SWT contract.
 ```
 SWTcontract.balanceOf.call(account)
 ```
@@ -115,7 +115,7 @@ You now have converted your ARC to SWT tokens.
 
 ### Timeline and duration
 
-As soon as we have deployed the new SWT token contract - we will publish the new token address and the software to exchange your tokens on our website https://swarm.city/ 
+As soon as we have deployed the new SWT token contract - we will publish the new token address and the software to exchange your tokens on our website https://swarm.city/
 
 There is no time limit on performing the conversion, meaning that this functionality will be permanently available in our contract.
 
