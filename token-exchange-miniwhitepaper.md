@@ -1,6 +1,6 @@
 ﻿# Token exchange whitepaper
 
-### The last step completing our rebranding process is upgrading our token to ‘Swarm Token’ (SWT). This will be a 1:1 token exchange. Meaning that you will have to exchange your old tokens for new tokens. You will receive an identical balance of SWT tokens on your existing account address.
+### The last step to completing our rebranding process is upgrading our token to ‘Swarm Token’ (SWT). This will be a 1:1 token exchange. Meaning that you will have to exchange your old tokens for new tokens. You will receive an identical balance of SWT tokens on your existing account address.
 
 This mini-whitepaper explains how this token exchange is executed.
 
