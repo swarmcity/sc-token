@@ -11,10 +11,17 @@ contract('MiniMeToken', function(accounts) {
   describe('Deploy MiniMeToken TokenFactory', function() {
 
     it("should deploy MiniMeToken contract", function(done) {
-      MiniMeTokenFactory.new().then(function(_miniMeTokenFactory) {
+      gasEstimate = self.web3.eth.estimateGas({
+        data: MiniMeTokenFactory.all_networks.default.unlinked_binary
+      });
+      console.log('estimated gas=', gasEstimate);
+      MiniMeTokenFactory.new({
+        gas: gasEstimate
+      }).then(function(_miniMeTokenFactory) {
         assert.ok(_miniMeTokenFactory.address);
         miniMeTokenFactory = _miniMeTokenFactory;
         console.log('miniMeTokenFactory created at address', _miniMeTokenFactory.address);
+        process.exit();
         done();
       });
     });

@@ -1,17 +1,21 @@
 {
-  "name": "sc-token",
+  "name": "SWTToken",
   "version": "1.0.0",
-  "description": "Swarm City token",
+  "description": "Swarm City Token contract",
   "main": "index.js",
-  "directories": {
-    "test": "test"
-  },
-  "dependencies": {
-  },
-  "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "truffle test"
   },
-  "author": "",
-  "license": "ISC"
+  "author": "Swarm City",
+  "license": "MIT",
+  "dependencies": {
+    "async": "^2.1.4",
+    "command-line-args": "^2.1.6",
+    "eth-lightwallet": "^2.5.2",
+    "ethereumjs-abi": "^0.6.4",
+    "fs": "0.0.2",
+    "hooked-web3-provider": "^1.0.0",
+    "solc": "^0.4.8",
+    "web3": "^0.15.1"
+  }
 }
