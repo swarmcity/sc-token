@@ -40,7 +40,7 @@ contract MiniMeToken {
     /// @param _amount The quantity of tokens generated
     /// @return True if the tokens are generated correctly
     function generateTokens(address _owner, uint _amount
-    ) onlyController returns (bool);
+    ) returns (bool);
 
 
 }
