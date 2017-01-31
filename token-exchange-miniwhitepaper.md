@@ -30,6 +30,8 @@ function totalSupplyAt(uint _blockNumber) constant returns(uint)
 function balanceOfAt(address _holder, uint _blockNumber) constant returns(uint)
 ```
 
+The address of the SWT Token is https://etherscan.io/token/0xb9e7f8568e08d5659f5d29c4997173d84cdf2607
+
 ### The token controller
 The controller of a MiniMe token contract manages the token in a seperate smart contract, and is the only address that can manage the token.
 
@@ -46,6 +48,8 @@ By using this contract as the base token, clones can be easily generated at any 
 All the applications the standard ERC 20 token can be used for, but with the ability to upgrade in the future as desired.
 All these applications and more are enabled by the MiniMe Token Contract. The most amazing part being that anyone that wants to add these features can, in a permissionless yet safe manner without affecting the parent token’s intended functionality. We are adding swarmwise features to the SWT Token.
 
+The address of the SWT Controller is https://etherscan.io/address/0x69e5da6904f73dfa845648e1991ad1dcc780f874
+
 ### Amount of SWT Token:
 The total number of SWT in circulation will be determined by how many ARC tokens get converted to SWT. If only 5,000,000 ARC tokens are converted into SWT, there will only be 5,000,000 SWT in circulation.
 
@@ -57,7 +61,7 @@ The ARC is destroyed immediately by sending it to a 0x000 address.
 
 ### Security of the contract
 
-The contract is created using the most recent solidity compiler to date ( v0.4.6 )
+The contract is created using the most recent solidity compiler to date ( v0.4.8 )
 
 The new token contract code is open source and can be reviewed here :
 [https://github.com/swarmcity/sc-token](https://github.com/swarmcity/sc-token)
@@ -114,9 +118,6 @@ https://etherscan.io/token/0xb9e7f8568e08d5659f5d29c4997173d84cdf2607
 
 ## Important!
 **Please do not send tokens directly to the new token address using any wallet software ( MyEtherWallet / Mist / MetaMask / etc. ) they will not be converted to SWT tokens this way and will be lost when you do so.**
-
-**Please send your ARC tokens from a regular account and not from a contract address.**
-
 
 ### Timeline and duration
 
