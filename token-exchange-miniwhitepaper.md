@@ -78,7 +78,7 @@ STEP1 : Import the ARC contract ABI at
 http://api.etherscan.io/api?module=contract&action=getabi&address=0xAc709FcB44a43c35F0DA4e3163b117A17F3770f5&format=raw
 
 STEP 2 : Import the SWTConverter ABI at
-http://api.etherscan.io/api?module=contract&action=getabi&address=(new contract address)&format=raw
+http://api.etherscan.io/api?module=contract&action=getabi&address=0x69e5da6904f73dfa845648e1991ad1dcc780f874&format=raw
 
 STEP 3 : From the ARC contract , determine your ARC balance :
 
@@ -88,12 +88,12 @@ ARCcontract.balanceOf.call(account)
 
 STEP 4 : Give an allowance to the new SWTConverter contract for the full balance of your ARC account.
 ```
-ARCcontract.approve(SWTcontractaddress,balance)
+ARCcontract.approve(SWTconverter.address,balance)
 ```
 
 STEP 5 : Call the convert function in the SWTConverter contract (call from the account that has the allowance from the previous step)
 ```
-SWTcontract.convert(balance)
+SWTconverter.convert(balance)
 ```
 This function will move your ARC tokens to the vault account, and will mint new SWT tokens on the same account address where the ARC tokens were previously stored.
 Your conversion should now be ready.
@@ -106,6 +106,11 @@ SWTcontract.balanceOf.call(account)
 
 You now have converted your ARC to SWT tokens.
 
+You can verify your new token balance by querying the new SWT Token contract at :
+
+```
+https://etherscan.io/token/0xb9e7f8568e08d5659f5d29c4997173d84cdf2607
+```
 
 ## Important!
 **Please do not send tokens directly to the new token address using any wallet software ( MyEtherWallet / Mist / MetaMask / etc. ) they will not be converted to SWT tokens this way and will be lost when you do so.**
