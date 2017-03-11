@@ -78,11 +78,13 @@ Please visit https://swarm.city/ and follow the steps to import your old ARC wal
 
 These are the steps required to perform the token exchange yourself:
 
-STEP1 : Import the ARC contract ABI at
+STEP1 : Import the ARCcontract ABI at
 http://api.etherscan.io/api?module=contract&action=getabi&address=0xAc709FcB44a43c35F0DA4e3163b117A17F3770f5&format=raw
 
 STEP 2 : Import the SWTConverter ABI at
 http://api.etherscan.io/api?module=contract&action=getabi&address=0x69e5da6904f73dfa845648e1991ad1dcc780f874&format=raw
+
+and the SWTcontract ABI at http://api.etherscan.io/api?module=contract&action=getabi&address=0xb9e7f8568e08d5659f5d29c4997173d84cdf2607&format=raw
 
 STEP 3 : From the ARC contract , determine your ARC balance :
 
